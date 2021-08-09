@@ -699,6 +699,15 @@
 									</div>
 
 								</div>
+								
+								<div class="row">
+									<div class="d-flex justify-content-center" style="height: 2em">
+										<p style="color: green; font-weight: 600; font-family: sans-serif" >
+											${ favoriteAddedMessage }
+										</p>
+									</div>
+								</div>
+								
 								<div class="row">
 									<div class="d-flex justify-content-center">
 										<div class="btn-group eButtonGroupDiv">

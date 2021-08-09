@@ -592,7 +592,7 @@
 												<div
 													class="d-flex justify-content-between align-items-center">
 													<div class="btn-group">
-														<a href="/partnerSearch-viewDetailsButton?id=${ user.email }" type="button"
+														<a href="/viewDetails?id=${ user.email }" type="button"
 															class="btn btn-primary ePartnerSearchBtn">View Details</a>
 														<a href="/message?id=${ user.email }" type="button"
 															class="btn btn-success ePartnerSearchBtn">Contact</a>

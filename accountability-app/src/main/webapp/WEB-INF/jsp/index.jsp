@@ -1150,9 +1150,7 @@
           >
             <div>Accountability Fun &copy; 2021</div>
             <div>
-              Made by
-              <a href="https://github.com/Kamona-WD" target="_blank" class="text-blue-500 hover:underline"
-                >Ahmed. </a> Customized by Eddie.
+              Made by Eddie
             </div>
           </footer>
         </div>

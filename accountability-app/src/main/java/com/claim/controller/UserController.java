@@ -1,15 +1,10 @@
 package com.claim.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.claim.entity.Favorites;
 //import com.claim.entity.Favorites;
 import com.claim.entity.User;
 import com.claim.repository.UserRepository;
+import com.claim.repository.FavoritesRepository;
 
 //@CrossOrigin
 //@RestController
@@ -32,6 +29,9 @@ public class UserController {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	FavoritesRepository favoritesRepository;
 
 	@Autowired
 	private HttpServletRequest request;
@@ -101,7 +101,7 @@ public class UserController {
 		return "partner-search";
 	}
 
-	@GetMapping("/partnerSearch-viewDetailsButton")
+	@GetMapping("/viewDetails")
 	public ModelAndView handlePartnerPageDetailsButton(Model model, HttpServletRequest request) {
 		String selectedUserProfilesEmail = request.getParameter("id");
 		System.out.println("Selected User's email is: " + selectedUserProfilesEmail);
@@ -112,27 +112,45 @@ public class UserController {
 
 //	@PostMapping("/favorites")
 	@RequestMapping(value = "/favorites", method = { RequestMethod.GET, RequestMethod.POST })
-	public String handleFavorites(Model model, HttpServletRequest request) {
-		System.out.println("I'm here in favorites");
-		String userEmailToAddToFavorite = request.getParameter("id");
-		System.out.println("The users Email to Add to Favorites is: " + userEmailToAddToFavorite);
+	public ModelAndView handleFavorites(@RequestParam String id, Model model, HttpServletRequest request) {
+//		System.out.println("I'm here in favorites");
+//		String selectedEmailString = request.getParameter("id");
+//		System.out.println("The users Email to Add to Favorites is: " + selectedEmailString);
 		String currentlyLoggedInUser = (String) request.getSession().getAttribute("email");
-		System.out.println("currentUserEmail is: " + currentlyLoggedInUser);
+//		System.out.println("currentUserEmail is: " + currentlyLoggedInUser);
+		
 //		User currentUser = userRepository.findUserByEmail(currentlyLoggedInUser); // Probably don't need
-		Optional<User> currentUser = userRepository.findById(currentlyLoggedInUser);
+		User currentUser = (User) userRepository.findUserByEmail(currentlyLoggedInUser);
+//		String currentUserString = 
 //		currentUser.get().setFavorites(userEmailToAddToFavorite); // Need to send to database, not this
 //		userRepository.addUserFavorite(userEmailToAddToFavorite, currentlyLoggedInUser); // Going to try to pass in an object, instead of a String
-		User tempUser = new User();
-//		Favorites tempFavorite = new Favorites();
-		// ----------- Supressing errors for now until I figure out what I need to do ------------------ //
+//		User tempUser = new User();
+//		List<Favorites> tempFavoriteList = new ArrayList<Favorites>();
+		// ----------- Suppressing errors for now until I figure out what I need to do ------------------ //
 //		tempFavorite.setId(0);
+//		System.out.println("Passed #1");
+//		Favorites favoriteToAdd = new Favorites(selectedEmailString, currentUser);
+//		System.out.println("Passed #2");
+//		Favorites tempFavorite = new Favorites();
 //		tempFavorite.setEmail(userEmailToAddToFavorite);
 //		tempFavorite.setUser(tempUser);
-//		tempUser.setFavorites(tempFavorite);
-//		userRepository.addUserFavorite(tempUser, currentlyLoggedInUser);
+//		tempFavoriteList.add(tempFavorite);
+//		currentUser.addUserFavorite(tempFavoriteList, currentlyLoggedInUser);
+		Favorites favorites = new Favorites();
+		favorites.setTitle(id);
+		favorites.setUser(currentUser);
+		favoritesRepository.save(favorites);
+//		currentUser.get().getFavorites().add(favoriteToAdd);
+//		currentUser.getFavorites().add(favoriteToAdd);
+//		System.out.println("Passed #3");
+//		userRepository.addUserFavorite(id, currentlyLoggedInUser);
+//		System.out.println("Passed #4");
 //		System.out.println("This user was added to your favorites: " + currentUser.get().getFavorites());
-//		model.addAttribute("favoriteAddedMessage", "Person was added to your Favoritess");
-		return "details";
+		String selectedUserProfilesEmail = request.getParameter("id");
+		User selectedUsersData = userRepository.findUserByEmail(selectedUserProfilesEmail);
+		model.addAttribute("user", selectedUsersData);
+		model.addAttribute("favoriteAddedMessage", "User added to your Favorites");
+		return new ModelAndView("details", "selectedUser", new User());
 	}
 
 //	@RequestMapping(

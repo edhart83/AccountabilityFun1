@@ -12,8 +12,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name="user")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "email")
 public class User {
 	@Column(name="first_name")
 	private String firstName;
@@ -35,9 +39,11 @@ public class User {
 	
 //	@OneToMany(mappedBy="favorites")
 //	@OneToMany
-//	@OneToMany(cascade=CascadeType.ALL, mappedBy ="user")
-//	@JoinColumn(name="email")
-//	private Favorites favorites;
+//	@OneToMany(cascade=CascadeType.ALL)
+//	@JoinColumn(name="user_id")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy ="user")
+//	private List<Favorites> favorites;
+	private List<Favorites> favorites = new ArrayList<Favorites>();
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="address_id")
@@ -99,12 +105,12 @@ public class User {
 	public void setBiography(String biography) {
 		this.biography = biography;
 	}
-//	public Favorites getFavorites() {
-//		return favorites;
-//	}
-//	public void setFavorites(Favorites tempFavorite) {
-//		this.favorites = tempFavorite;
-//	}
+	public List<Favorites> getFavorites() {
+		return favorites;
+	}
+	public void setFavorites(List<Favorites> tempFavorite) {
+		this.favorites = tempFavorite;
+	}
 
 	
 	
